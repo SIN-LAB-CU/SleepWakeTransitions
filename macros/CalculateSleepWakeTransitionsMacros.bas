@@ -1,7 +1,7 @@
 Sub CalculateSleepWakeTransitions()
     Dim ws As Worksheet, resultSheet As Worksheet
     Dim startRow As Long, thresholdRow As Long
-    Dim hourSegmentSize As Long
+    Dim SegmentSize As Long
     Dim cageStartCol As Long, cageEndCol As Long
     Dim i As Long, j As Long, col As Long
     Dim transitions As Long
@@ -12,7 +12,7 @@ Sub CalculateSleepWakeTransitions()
     Set ws = ThisWorkbook.Sheets("m trans DoD WT males G2 baselin")
     thresholdRow = 2 ' Row containing the threshold values
     startRow = 3     ' Data starts from this row
-    hourSegmentSize = 1800 ' Number of rows for each hour segment
+    SegmentSize = 1800 ' Number of rows for each segment
     cageStartCol = 2  ' First cage column (e.g., column B)
     cageEndCol = 17   ' Last cage column (e.g., column Q)
 
@@ -31,11 +31,11 @@ Sub CalculateSleepWakeTransitions()
         resultSheet.Cells(1, col - cageStartCol + 2).Value = "Cage " & (col - cageStartCol + 1)
     Next col
 
-    ' Loop through rows in hour segments
+    ' Loop through rows in segments
     Dim segmentCounter As Long
     segmentCounter = 1 ' Counter for hour segments
 
-    For i = startRow To ws.Cells(ws.Rows.Count, 1).End(xlUp).Row Step hourSegmentSize
+    For i = startRow To ws.Cells(ws.Rows.Count, 1).End(xlUp).Row Step SegmentSize
         resultSheet.Cells(segmentCounter + 1, 1).Value = "Segment " & segmentCounter
 
         For col = cageStartCol To cageEndCol
@@ -46,7 +46,7 @@ Sub CalculateSleepWakeTransitions()
             transitions = 0
 
             ' Loop through rows in the current segment
-            For j = i To Application.Min(i + hourSegmentSize - 1, ws.Cells(ws.Rows.Count, 1).End(xlUp).Row)
+            For j = i To Application.Min(i + SegmentSize - 1, ws.Cells(ws.Rows.Count, 1).End(xlUp).Row)
                 currentValue = ws.Cells(j, col).Value
                 previousValue = ws.Cells(j - 1, col).Value
 
